@@ -9,6 +9,8 @@ two standards can look. It is closely coordinated with the HL7 Workflow Project.
 make a significant contribution to the digitization (of processes) of evidence-based medicine.
 
 Detailed Documentation can be found [here](https://fhooeaist.github.io/MSBPMN).
+## Cambios realizados para Fuji
+Actualizado a java 21, se han modificado dependencias
 
 ## Getting Started
 
