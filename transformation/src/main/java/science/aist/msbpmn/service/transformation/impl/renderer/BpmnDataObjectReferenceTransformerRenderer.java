@@ -37,18 +37,22 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
- * <p>Renderer for the BPMN Data Object Reference element</p>
+ * <p>
+ * Renderer for the BPMN Data Object Reference element
+ * </p>
  *
  * @author Andreas Pointner
  */
 @Component
 @CustomLog
-public class BpmnDataObjectReferenceTransformerRenderer extends AbstractBpmnGraphTransformationRenderer<TDataObjectReference, BackboneElement, PlanDefinitionActionIOComponent> {
+public class BpmnDataObjectReferenceTransformerRenderer extends
+        AbstractBpmnGraphTransformationRenderer<TDataObjectReference, BackboneElement, PlanDefinitionActionIOComponent> {
 
     private static final String FHIR_EXTENSION_NAMESPACE = "http://aist.fh-hagenberg.at/msbpmn/bpmn-extension/fhir";
 
     public BpmnDataObjectReferenceTransformerRenderer(ObjectFactory objectFactory) {
-        // No condition needed, as this renderer is executed for every vertex where the decorated element is of type PlanDefinitionActionIOComponent
+        // No condition needed, as this renderer is executed for every vertex where the
+        // decorated element is of type PlanDefinitionActionIOComponent
         super(() -> x -> true, objectFactory);
     }
 
@@ -83,15 +87,20 @@ public class BpmnDataObjectReferenceTransformerRenderer extends AbstractBpmnGrap
     }
 
     @Override
-    public TDataObjectReference mapProperties(@NonNull TDataObjectReference element, Graph<BackboneElement, Void> container, @NonNull Vertex<PlanDefinitionActionIOComponent, Void> currentElement) {
+    public TDataObjectReference mapProperties(@NonNull TDataObjectReference element,
+            Graph<BackboneElement, Void> container,
+            @NonNull Vertex<PlanDefinitionActionIOComponent, Void> currentElement) {
         element = super.mapProperties(element, container, currentElement);
         element.setName(currentElement.getElement().getName());
-        element.setExtensionElements(createExtensionElementForRequirement(currentElement.getElement().getDataRequirement()));
+        element.setExtensionElements(
+                createExtensionElementForRequirement(currentElement.getElement().getDataRequirement()));
 
         // Set the data reference
-        CastUtils.<Stream<Edge<PlanDefinitionActionIOComponent, Void>>, Stream<Edge<PlanDefinitionActionDataComponent, Void>>>cast(currentElement.getEdges()
-                        .stream()
-                        .filter(BpmnDataObjectReferenceTransformerRenderer::isDataEdge))
+        CastUtils
+                .<Stream<Edge<PlanDefinitionActionIOComponent, Void>>, Stream<Edge<PlanDefinitionActionDataComponent, Void>>>cast(
+                        currentElement.getEdges()
+                                .stream()
+                                .filter(BpmnDataObjectReferenceTransformerRenderer::isDataEdge))
                 .findFirst()
                 .map(Edge::getTarget)
                 .map(Vertex::getElement)
@@ -105,8 +114,7 @@ public class BpmnDataObjectReferenceTransformerRenderer extends AbstractBpmnGrap
         TExtensionElements tee = objectFactory.createTExtensionElements();
         // check in the future what else is necessary to map to bpmn
         tee.getAny().addAll(fromMap(Map.of(
-                "type", dr.getType()
-        )));
+                "type", dr.getType())));
         return tee;
     }
 }
