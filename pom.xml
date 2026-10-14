@@ -286,6 +286,7 @@
                 <version>${maven-compiler-plugin.version}</version>
                 <configuration>
                     <release>11</release>
+                    <parameters>true</parameters>
                 </configuration>
             </plugin>
             <plugin>

@@ -61,7 +61,7 @@ public class BpmnGraphTransformerTest {
         graph.addMetaTag(new MetaTagImpl<>(TransformationConstants.START_NODE_META_TAG, List.of(action1)));
         graph.addMetaTag(new MetaTagImpl<>(PROCESS_NAME_TAG, "processname"));
 
-        TransformationRender<JAXBElement<? extends TFlowNode>, ?, Graph<BackboneElement, Void>, Vertex<BackboneElement, Void>> elementRenderer = Mockito.mock(TransformationRender.class);
+        TransformationRender<JAXBElement<? extends TFlowElement>, ?, Graph<BackboneElement, Void>, Vertex<BackboneElement, Void>> elementRenderer = Mockito.mock(TransformationRender.class);
         Mockito.doReturn(objectFactory.createUserTask(new TUserTask())).when(elementRenderer).renderElement(ArgumentMatchers.any(), ArgumentMatchers.any());
 
         TransformationRender<Optional<JAXBElement<? extends TSequenceFlow>>, TSequenceFlow, Graph<BackboneElement, Void>, Edge<PlanDefinition.PlanDefinitionActionComponent, Void>> edgeRenderer = Mockito.mock(TransformationRender.class);

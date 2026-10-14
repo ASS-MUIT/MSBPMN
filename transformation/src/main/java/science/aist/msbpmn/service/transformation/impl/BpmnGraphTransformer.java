@@ -39,7 +39,7 @@ public class BpmnGraphTransformer implements GraphTransformer<BackboneElement, V
     private static final String BPMN_AIST_MSBPMN_DEFAULT_NS = "http://aist.fh-hagenberg.at/msbpmn";
 
     private final ObjectFactory objectFactory;
-    private final TransformationRender<JAXBElement<? extends TFlowNode>, ?, Graph<BackboneElement, Void>, Vertex<BackboneElement, Void>> elementRenderer;
+    private final TransformationRender<JAXBElement<? extends TFlowElement>, ?, Graph<BackboneElement, Void>, Vertex<BackboneElement, Void>> elementRenderer;
     private final TransformationRender<Optional<JAXBElement<? extends TSequenceFlow>>, TSequenceFlow, Graph<BackboneElement, Void>, Edge<PlanDefinition.PlanDefinitionActionComponent, Void>> edgeRenderer;
     private final TransformationRender<TLaneSet, ?, Graph<BackboneElement, Void>, Vertex<BackboneElement, Void>> tLaneSetGraphVertexTransformationRender;
 

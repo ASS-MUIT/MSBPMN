@@ -12,6 +12,31 @@ Detailed Documentation can be found [here](https://fhooeaist.github.io/MSBPMN).
 ## Cambios realizados para Fuji
 Actualizado a java 21, se han modificado dependencias
 
+### Compatibilidad con Spring 6/7 (Spring Boot 3/4)
+La librería se diseñó para Spring 5.3. Para poder usar `TransformationConfiguration` desde una aplicación
+Spring Boot 4 (Spring 7) se han hecho estos cambios:
+
+- **`pom.xml`**: se añade `<parameters>true</parameters>` a la configuración de `maven-compiler-plugin`.
+  Varios beans se inyectan por el *nombre* del parámetro (p. ej. los cinco
+  `PlanDefinitionBackboneGraphComponentProcessor`). Spring 5 obtenía ese nombre de la información de
+  depuración (`LocalVariableTable`), pero desde Spring 6.1 solo lo lee de los metadatos `MethodParameters`
+  que genera `javac -parameters`. Sin ellos el arranque falla con `NoUniqueBeanDefinitionException`.
+- **`BpmnGraphTransformer`**: el campo `elementRenderer` pasa de
+  `TransformationRender<JAXBElement<? extends TFlowNode>, ...>` a
+  `TransformationRender<JAXBElement<? extends TFlowElement>, ...>`, que es el tipo que declara el bean
+  `multiConditionalGraphTransformationRenderer` en `TransformationConfiguration`. Spring 5 aceptaba la
+  diferencia de genéricos, pero Spring 6/7 no (`NoSuchBeanDefinitionException`). El cambio es compatible
+  porque el resultado se añade a `TProcess.getFlowElement()`, que admite `JAXBElement<? extends TFlowElement>`.
+  `BpmnGraphTransformerTest` se ha ajustado al nuevo tipo.
+
+Notas para quien use la librería:
+- Usa `javax.xml.bind` (JAXB 2.3). Spring Boot gestiona `org.glassfish.jaxb:jaxb-runtime` y lo sube a
+  4.x (`jakarta.xml.bind`), con lo que la transformación falla con
+  *"Implementation of JAXB-API has not been found"*. En Gradle se fija con
+  `ext['glassfish-jaxb.version'] = '2.3.9'` (en Maven, la propiedad `glassfish-jaxb.version`).
+- Todas las acciones del `PlanDefinition`, incluidas las anidadas, deben tener `id`
+  (`PlanDefinitionActionStartEventCondition` compara ids y lanza `NullPointerException` si falta alguno).
+
 ## Getting Started
 
 A transformation from an adapted version of a Fhir PlanDefinition to the BPMN specification is provided. The transformation
